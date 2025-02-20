@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 
-# Ensure OpenAI API key is stored securely (Use Environment Variable in Render)
+# Ensure OpenAI API key is stored securely in Render
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.route("/analyze", methods=["POST"])
@@ -17,15 +17,17 @@ def analyze():
         if not image_data:
             return jsonify({"error": "No image provided"}), 400
 
-        # OpenAI API Call (New API Format)
+        # OpenAI API Call for Image Analysis
         client = openai.OpenAI(api_key=openai.api_key)
 
         response = client.chat.completions.create(
-            model="gpt-4o",  # Use GPT-4o Mini for cost efficiency
+            model="gpt-4o",  # Ensure GPT-4o (or GPT-4 Vision) is used
             messages=[
                 {"role": "system", "content": "You are a fashion expert that suggests matching outfits."},
-                {"role": "user", "content": "Analyze this clothing item and suggest a matching outfit."},
-                {"role": "assistant", "content": f"Here is the image for analysis: {image_data}"}
+                {"role": "user", "content": [
+                    {"type": "text", "text": "Analyze this clothing item and suggest a matching outfit."},
+                    {"type": "image_url", "image_url": f"data:image/jpeg;base64,{image_data}"}
+                ]}
             ],
             max_tokens=300
         )
@@ -37,6 +39,7 @@ def analyze():
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=10000)
+
 
 
 
