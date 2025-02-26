@@ -4,7 +4,7 @@ from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
-OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # Ensure you set this in your environment
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")  # Ensure this is set in Render Environment Variables
 
 def analyze_clothing(base64_image):
     client = openai.OpenAI(api_key=OPENAI_API_KEY)
@@ -38,6 +38,7 @@ def analyze():
 
     return jsonify({"analysis": result})
 
+# ✅ Fix: Use Render's PORT dynamically
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 5000))  # Use Render's assigned port
+    port = int(os.environ.get("PORT", 10000))  # Render assigns dynamic ports
     app.run(debug=True, host='0.0.0.0', port=port)
