@@ -39,5 +39,5 @@ def analyze():
     return jsonify({"analysis": result})
 
 if __name__ == '__main__':
-    port = int(os.environ.get("PORT", 10000))  # Render's dynamic port
+    port = int(os.environ.get("PORT", 5000))  # Use Render's assigned port
     app.run(debug=True, host='0.0.0.0', port=port)
